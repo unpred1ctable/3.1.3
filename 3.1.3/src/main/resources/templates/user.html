@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User page</title>
+</head>
+<body>
+<table class ="table table-dark">
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Username</th>
+        <th scope="col">Password</th>
+        <th scope="col">Roles</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:method="GET" th:action="@{/user}" th:object="${userPage}">
+        <td th:text="${userPage.getId()}">
+        <td th:text="${userPage.getUsername()}">
+        <td th:text="${userPage.getPassword()}">
+        <td th:text="${userPage.getAuthorities()}">
+    </tbody>
+
+</table>
+<form th:action="@{/logout}">
+    <button type="submit">Logout</button>
+</form>
+<br/>
+<hr/>
+</div>
+</body>
+</html>
