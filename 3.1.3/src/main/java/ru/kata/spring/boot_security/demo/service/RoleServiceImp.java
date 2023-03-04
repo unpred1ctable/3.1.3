@@ -1,42 +1,35 @@
 package ru.kata.spring.boot_security.demo.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.dao.RoleDao;
 import ru.kata.spring.boot_security.demo.entities.Role;
-import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
-
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class RoleServiceImp implements RoleService {
-    @Autowired
-    RoleRepository roleRepository;
-
-    @PersistenceContext
-    private EntityManager entityManager;
-    @Override
-    public Role findById(long id){
-        return entityManager.find(Role.class, id);
+    private RoleDao roleDao;
+    public RoleServiceImp(RoleDao roleDao) {
+        this.roleDao = roleDao;
     }
+    @Transactional
     @Override
-     public List<Role> getAllRoles() {
-        return entityManager.createQuery("select r from Role r").getResultList();
-     }
-     @Override
-     public void addRole(Role role) {
-        entityManager.persist(role);
-     }
-     @Override
-     public Role getRole(String role) {
-        return entityManager.createQuery("select r from Role r where r.role =: role", Role.class)
-                .setParameter("role",role).getSingleResult();
-     }
+    public Role addRole(Role role) {
+        roleDao.addRole(role);
+        return role;
+    }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Set<Role> getAllRoles() {
+        return roleDao.getAllRoles();
+    }
 
-
-
-
+    @Transactional
+    @Override
+    public Optional<Role> findByName(String name) {
+        return roleDao.findByName(name);
+    }
 }
